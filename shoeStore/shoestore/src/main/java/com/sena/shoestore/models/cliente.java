@@ -22,28 +22,28 @@ public class cliente {
 
      @Id
      @GeneratedValue(strategy = GenerationType.UUID)
-     @Column(name = "idCliente", nullable = false, length = 12)
+     @Column(name = "idCliente", nullable = false, length = 36)
      private String idCliente;
 
      @Column(name = "tipoDocumento" , nullable = false, length = 10)
      private String tipoDocumento;
 
-     @Column(name = "numeroDocumento", nullable = false, length = 15)
+     @Column(name = "numeroDocumento", nullable = false, length = 10)
      private String numeroDocumento;
 
-     @Column(name = "nombreCliente", nullable = false, length = 36)
+     @Column(name = "nombreCliente", nullable = false, length = 45)
      private String nombreCliente;
 
-     @Column(name = "apellidoCliente", nullable = false, length = 36)
+     @Column(name = "apellidoCliente", nullable = false, length = 45)
      private String apellidoCliente;
 
-     @Column(name = "telefono", nullable = false, length = 15)
+     @Column(name = "telefono", nullable = false, length = 13)
      private String telefono;
 
-     @Column(name = "direccion", nullable = false, length = 36)
+     @Column(name = "direccion", nullable = false, length = 45)
      private String direccion;
 
-     @Column(name = "ciudad", nullable = false, length = 36)
+     @Column(name = "ciudad", nullable = false, length = 45)
      private String ciudad;
 
      @Column(name = "estado", nullable = false, length = 11)

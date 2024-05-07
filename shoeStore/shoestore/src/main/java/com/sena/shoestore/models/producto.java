@@ -8,8 +8,9 @@ import jakarta.persistence.Id;
 
 @Entity(name = "producto")
 public class producto {
-    
-    /*id
+
+    /*
+     * id
      * nombre Producto
      * descripcion
      * cantidad
@@ -19,34 +20,43 @@ public class producto {
      * estado
      */
 
-     @Id
-     @GeneratedValue(strategy = GenerationType.UUID)
-     @Column(name = "idProducto", nullable = false, length = 12)
-     private String idProducto;
+    @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
+    @Column(name = "idProducto", nullable = false, length = 36)
+    private String idProducto;
 
-     @Column(name = "descripcion", nullable = false, length = 800)
-     private String descripcion;
+    @Column(name = "nombreProducto", nullable = false, length = 800)
+    private String nombreProducto;
 
-     @Column(name = "cantidad", nullable = false, length = 50)
-     private int cantidad;
+    @Column(name = "descripcion", nullable = false, length = 800)
+    private String descripcion;
 
-     @Column(name = "precio", nullable = false, length = 50)
-     private int precio;
+    @Column(name = "cantidad", nullable = false, length = 50)
+    private String cantidad;
 
-     @Column(name = "descuento", nullable = false, length = 50)
-     private int descuento;
+    @Column(name = "precio", nullable = false, length = 50)
+    private String precio;
 
-     @Column(name = "estado", nullable = false, length = 11)
-     private String estado;
+    @Column(name = "IVA", nullable = false, length = 50)
+    private String IVA;
+
+    @Column(name = "descuento", nullable = false, length = 50)
+    private String descuento;
+
+    @Column(name = "estado", nullable = false, length = 11)
+    private String estado;
 
     public producto() {
     }
 
-    public producto(String idProducto, String descripcion, int cantidad, int precio, int descuento, String estado) {
+    public producto(String idProducto, String nombreProducto, String descripcion, String cantidad, String precio,
+            String iVA, String descuento, String estado) {
         this.idProducto = idProducto;
+        this.nombreProducto = nombreProducto;
         this.descripcion = descripcion;
         this.cantidad = cantidad;
         this.precio = precio;
+        IVA = iVA;
         this.descuento = descuento;
         this.estado = estado;
     }
@@ -59,6 +69,14 @@ public class producto {
         this.idProducto = idProducto;
     }
 
+    public String getNombreProducto() {
+        return nombreProducto;
+    }
+
+    public void setNombreProducto(String nombreProducto) {
+        this.nombreProducto = nombreProducto;
+    }
+
     public String getDescripcion() {
         return descripcion;
     }
@@ -67,27 +85,27 @@ public class producto {
         this.descripcion = descripcion;
     }
 
-    public int getCantidad() {
+    public String getCantidad() {
         return cantidad;
     }
 
-    public void setCantidad(int cantidad) {
+    public void setCantidad(String cantidad) {
         this.cantidad = cantidad;
     }
 
-    public int getPrecio() {
+    public String getPrecio() {
         return precio;
     }
 
-    public void setPrecio(int precio) {
+    public void setPrecio(String precio) {
         this.precio = precio;
     }
 
-    public int getDescuento() {
+    public String getDescuento() {
         return descuento;
     }
 
-    public void setDescuento(int descuento) {
+    public void setDescuento(String descuento) {
         this.descuento = descuento;
     }
 
@@ -97,6 +115,14 @@ public class producto {
 
     public void setEstado(String estado) {
         this.estado = estado;
+    }
+
+    public String getIVA() {
+        return IVA;
+    }
+
+    public void setIVA(String iVA) {
+        IVA = iVA;
     }
 
 }
