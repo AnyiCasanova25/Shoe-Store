@@ -88,8 +88,5 @@ public class venta {
     public void setIdCliente(cliente idCliente) {
         this.idCliente = idCliente;
     }
-     
-
-     
 
 }
