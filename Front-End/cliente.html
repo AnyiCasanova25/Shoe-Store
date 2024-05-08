@@ -37,6 +37,7 @@
             left: -35px;
             z-index: 1;
         }
+
     </style>
 </head>
 
@@ -51,7 +52,7 @@
     <!-- Barra de búsqueda -->
     <div class="container search-bar">
         <div class="input-group mb-3">
-            <input type="text" class="form-control search-input" placeholder="Buscar" aria-label="Buscar" aria-describedby="button-addon2" >
+            <input type="text" class="col col-xl-6 col-12"  class="form-control search-input" placeholder="Buscar" aria-label="Buscar" aria-describedby="button-addon2" >
             <span class="input-group-text search-icon" id="button-addon2">
                 <i class="fas fa-search"></i>
             </span>
@@ -62,36 +63,36 @@
         <div class="container" style="padding: 7%; color:rgb(0, 0, 0);">
             <h1 style="padding-top: 5%;"><b>Registrar Cliente</b></h1>
             <div class="row">
-                <div class="col col-xl-5 col-10" style="padding-top: 2%;">
+                <div class="col col-xl-6 col-10" style="padding-top: 2%;">
                     <label for="tipoDocumento">Tipo de Identificacion</label>
                     <input type="text" id="tipoDocumento" class="form-control" onfocusout="validarTipoId(this);">
                 </div>
-                <div class="col col-xl-5 col-10" style="padding-top:2%;">
+                <div class="col col-xl-6 col-10" style="padding-top:2%;">
                     <label for="numeroDocumento">Numero de Identificacion</label>
                     <!--para que no acepte decimal se utiliza step-->
                     <input type="number" id="numeroDocumento" step="1" class="form-control" onfocusout="validarNumeroIdentificacion(this);">
                 </div>
-                <div class="col col-xl-5 col-10" style="padding-top:2%;">
+                <div class="col col-xl-6 col-10" style="padding-top:2%;">
                     <label for="nombreCliente">Nombre del Cliente</label>
                     <input type="text" id="nombreCliente" class="form-control">
                 </div>
-                <div class="col col-xl-5 col-10" style="padding-top:2%;">
+                <div class="col col-xl-6 col-10" style="padding-top:2%;">
                     <label for="apellidoCliente">Apellido del Cliente</label>
                     <input type="text" id="apellidoCliente" class="form-control">
                 </div>
-                <div class="col col-xl-5 col-10" style="padding-top:2%;">
+                <div class="col col-xl-6 col-10" style="padding-top:2%;">
                     <label for="telefono">Telefono</label>
                     <input type="text" id="telefono" class="form-control">
                 </div>
-                <div class="col col-xl-5 col-10" style="padding-top:2%;">
+                <div class="col col-xl-6 col-10" style="padding-top:2%;">
                     <label for="direccion">Direccion</label>
                     <input type="text" id="direccion" class="form-control">
                 </div>
-                <div class="col col-xl-5 col-10" style="padding-top:2%;">
+                <div class="col col-xl-6 col-10" style="padding-top:2%;">
                     <label for="ciudad">Ciudad</label>
                     <input type="text" id="ciudad" class="form-control">
                 </div>
-                <div class="col col-xl-5 col-10" style="padding-top:2%;">
+                <div class="col col-xl-6 col-10" style="padding-top:2%;">
                     <label for="estado">Estado</label>
                     <input type="text" id="estado" class="form-control">
                 </div>
