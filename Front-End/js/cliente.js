@@ -36,10 +36,10 @@ function buscarClientePorFiltro(filtro) {
 function buscarClientePorEstado(estado) {
     if (estado === '') {
         listarMedico(); // Mostrar todos los médicos si estado es vacío
-    } else if (estado === 'H') {
-        // Mostrar solo los médicos habilitados si estado es 'H'
+    } else if (estado === 'Activo') {
+        // Mostrar solo los clientes habilitados si estado es 'H'
         $.ajax({
-            url: "http://localhost:8080/api/v1/cliente/busquedafiltroestado/" + estado,
+            url: "http://localhost:8080/api/v1/cliente/busquedafiltroEstado/" + estado,
             type: "GET",
             success: function (result) {
                 var cuerpoTabla = document.getElementById("cuerpoTabla");
@@ -73,7 +73,7 @@ function buscarClientePorEstado(estado) {
     } else {
         // Mostrar solo los médicos deshabilitados si no es vacío ni 'H'
         $.ajax({
-            url: "http://localhost:8080/api/v1/cliente/busquedafiltroestado/" + estado,
+            url: "http://localhost:8080/api/v1/cliente/busquedafiltroEstado/" + estado,
             type: "GET",
             success: function (result) {
                 var cuerpoTabla = document.getElementById("cuerpoTabla");
@@ -93,7 +93,7 @@ function buscarClientePorEstado(estado) {
                         <td class="text-center align-middle">${result[i]["estado"]}</td>
                         <td class="text-center align-middle">
                             <i class="fas fa-edit editar"  onclick="registrarClienteBandera=false;" data-id="${result[i]["idCliente"]}"></i>
-                            <i class="fas fa-user-slash cambiarEstado" onclick="cambiarEstado(${result[i]["idCliente"]})" data-id="${result[i]["idMedico"]}"></i>
+                            <i class="fas fa-user-slash cambiarEstado" onclick="cambiarEstado(${result[i]["idCliente"]})" data-id="${result[i]["idCliente"]}"></i>
                             <i class="fas fa-trash-alt eliminar" data-id="${result[i]["idCliente"]}"></i>
                         </td>
                     `;
@@ -211,210 +211,214 @@ function registrarCliente() {
 
 // Función para validar campos
 // Función  Documento Identidad
-function validarCampoNumeroDocumento() {
-    var  numeroDocumento = document.getElementById("numeroDocumento");
-    return validarNumeroDocumento(numeroDocumento);
-}
-
-// Función para validar el documento de identidad
-function validarNumeroDocumento(cuadroNumero) {
-    var valor = cuadroNumero.value;
-    var valido = true;
-
-    if (valor.length < 5 || valor.length > 11) {
-        valido = false;
+//CORREGIR ESTOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO
+function validarCampos() {
+    function validarCampoNumeroDocumento() {
+        var numeroDocumento = document.getElementById("numeroDocumento");
+        return validarNumeroDocumento(numeroDocumento);
     }
 
-    if (valido) {
-        cuadroNumero.className = "form-control is-valid";
-    } else {
-        cuadroNumero.className = "form-control is-invalid";
+    // Función para validar el documento de identidad
+    function validarNumeroDocumento(cuadroNumero) {
+        var valor = cuadroNumero.value;
+        var valido = true;
+
+        if (valor.length < 5 || valor.length > 13) {
+            valido = false;
+        }
+
+        if (valido) {
+            cuadroNumero.className = "form-control is-valid";
+        } else {
+            cuadroNumero.className = "form-control is-invalid";
+        }
+
+        return valido;
     }
 
-    return valido;
-}
 
+    // Función tipo documento
 
-// Función tipo documento
-
-function validarValidarCampoTipoDocumento() {
-    var tipoDocumento  = document.getElementById("tipoDocumento");
-    return (tipoDocumento);
-}
-
-// Función para validar 
-
-function validarTipoDocumento(cuadroNumero) {
-    var valor = cuadroNumero.value;
-    var valido = true;
-
-    if (valor.length < 1 || valor.length > 11) {
-        valido = false;
+    function validarValidarCampoTipoDocumento() {
+        var tipoDocumento = document.getElementById("tipoDocumento");
+        return (tipoDocumento);
     }
 
-    if (valido) {
-        cuadroNumero.className = "form-control is-valid";
-    } else {
-        cuadroNumero.className = "form-control is-invalid";
+    // Función para validar 
+
+    function validarTipoDocumento(cuadroNumero) {
+        var valor = cuadroNumero.value;
+        var valido = true;
+
+        if (valor.length < 1 || valor.length > 3) {
+            valido = false;
+        }
+
+        if (valido) {
+            cuadroNumero.className = "form-control is-valid";
+        } else {
+            cuadroNumero.className = "form-control is-invalid";
+        }
+
+        return valido;
     }
 
-    return valido;
-}
 
+    // Función nombre cliente
 
-// Función nombre cliente
-
-function validarCampoNombreCliente() {
-    var nombreCliente = document.getElementById("nombreCliente");
-    return validarNombreCliente(nombreCliente);
-}
-
-// Función para validar 
-function validarNombreCliente(cuadroNumero) {
-    var valor = cuadroNumero.value;
-    var valido = true;
-
-    if (valor.length < 1 || valor.length > 11) {
-        valido = false;
+    function validarCampoNombreCliente() {
+        var nombreCliente = document.getElementById("nombreCliente");
+        return validarNombreCliente(nombreCliente);
     }
 
-    if (valido) {
-        cuadroNumero.className = "form-control is-valid";
-    } else {
-        cuadroNumero.className = "form-control is-invalid";
+    // Función para validar 
+    function validarNombreCliente(cuadroNumero) {
+        var valor = cuadroNumero.value;
+        var valido = true;
+
+        if (valor.length < 1 || valor.length > 45) {
+            valido = false;
+        }
+
+        if (valido) {
+            cuadroNumero.className = "form-control is-valid";
+        } else {
+            cuadroNumero.className = "form-control is-invalid";
+        }
+
+        return valido;
     }
 
-    return valido;
-}
 
+    // Función apellido cliente
 
-// Función apellido cliente
-
-function validarCampoApellidoCliente() {
-    var apellidoCliente = document.getElementById("apellidoCliente");
-    return validarApellidoCliente(apellidoCliente);
-}
-
-// Función para validar 
-function validarApellidoCliente(cuadroNumero) {
-    var valor = cuadroNumero.value;
-    var valido = true;
-
-    if (valor.length < 1 || valor.length > 15) {
-        valido = false;
+    function validarCampoApellidoCliente() {
+        var apellidoCliente = document.getElementById("apellidoCliente");
+        return validarApellidoCliente(apellidoCliente);
     }
 
-    if (valido) {
-        cuadroNumero.className = "form-control is-valid";
-    } else {
-        cuadroNumero.className = "form-control is-invalid";
+    // Función para validar 
+    function validarApellidoCliente(cuadroNumero) {
+        var valor = cuadroNumero.value;
+        var valido = true;
+
+        if (valor.length < 1 || valor.length > 45) {
+            valido = false;
+        }
+
+        if (valido) {
+            cuadroNumero.className = "form-control is-valid";
+        } else {
+            cuadroNumero.className = "form-control is-invalid";
+        }
+
+        return valido;
     }
 
-    return valido;
-}
 
+    // Función telefono
 
-// Función telefono
-
-function validarCampoTelefono() {
-    var telefono = document.getElementById("telefono");
-    return validarTelefono(telefono);
-}
-
-// Función para validar 
-function validarTelefono(cuadroNumero) {
-    var valor = cuadroNumero.value;
-    var valido = true;
-
-    if (valor.length < 1 || valor.length > 155) {
-        valido = false;
+    function validarCampoTelefono() {
+        var telefono = document.getElementById("telefono");
+        return validarTelefono(telefono);
     }
 
-    if (valido) {
-        cuadroNumero.className = "form-control is-valid";
-    } else {
-        cuadroNumero.className = "form-control is-invalid";
+    // Función para validar 
+    function validarTelefono(cuadroNumero) {
+        var valor = cuadroNumero.value;
+        var valido = true;
+
+        if (valor.length < 1 || valor.length > 13) {
+            valido = false;
+        }
+
+        if (valido) {
+            cuadroNumero.className = "form-control is-valid";
+        } else {
+            cuadroNumero.className = "form-control is-invalid";
+        }
+
+        return valido;
     }
 
-    return valido;
-}
 
+    // Función Direccion
 
-// Función Direccion
-
-function validarCampoDireccion() {
-    var direccion = document.getElementById("direccion");
-    return validarDireccion(direccion);
-}
-
-// Función para validar 
-function validarDireccion(cuadroNumero) {
-    var valor = cuadroNumero.value;
-    var valido = true;
-
-    if (valor.length < 1 || valor.length > 15) {
-        valido = false;
+    function validarCampoDireccion() {
+        var direccion = document.getElementById("direccion");
+        return validarDireccion(direccion);
     }
 
-    if (valido) {
-        cuadroNumero.className = "form-control is-valid";
-    } else {
-        cuadroNumero.className = "form-control is-invalid";
+    // Función para validar 
+    function validarDireccion(cuadroNumero) {
+        var valor = cuadroNumero.value;
+        var valido = true;
+
+        if (valor.length < 1 || valor.length > 45) {
+            valido = false;
+        }
+
+        if (valido) {
+            cuadroNumero.className = "form-control is-valid";
+        } else {
+            cuadroNumero.className = "form-control is-invalid";
+        }
+
+        return valido;
     }
 
-    return valido;
-}
 
+    // Función ciudad
 
-// Función ciudad
-
-function validarCampoCiudad() {
-    var ciudad = document.getElementById("ciudad");
-    return validarCiudad(ciudad);
-}
-
-// Función para validar 
-function validarCiudad(cuadroNumero) {
-    var valor = cuadroNumero.value;
-    var valido = true;
-
-    if (valor.length < 1 || valor.length > 15) {
-        valido = false;
+    function validarCampoCiudad() {
+        var ciudad = document.getElementById("ciudad");
+        return validarCiudad(ciudad);
     }
 
-    if (valido) {
-        cuadroNumero.className = "form-control is-valid";
-    } else {
-        cuadroNumero.className = "form-control is-invalid";
+    // Función para validar 
+    function validarCiudad(cuadroNumero) {
+        var valor = cuadroNumero.value;
+        var valido = true;
+
+        if (valor.length < 1 || valor.length > 45) {
+            valido = false;
+        }
+
+        if (valido) {
+            cuadroNumero.className = "form-control is-valid";
+        } else {
+            cuadroNumero.className = "form-control is-invalid";
+        }
+
+        return valido;
     }
 
-    return valido;
-}
 
+    // Función Estado
 
-// Función Estado
-
-function validarCampoEstado() {
-    var estado = document.getElementById("estado");
-    return validarEstado(estado);
-}
-
-// Función para validar 
-function validarEstado(cuadroNumero) {
-    var valor = cuadroNumero.value;
-    var valido = true;
-
-    if (valor.length < 1 || valor.length > 15) {
-        valido = false;
+    function validarCampoEstado() {
+        var estado = document.getElementById("estado");
+        return validarEstado(estado);
     }
 
-    if (valido) {
-        cuadroNumero.className = "form-control is-valid";
-    } else {
-        cuadroNumero.className = "form-control is-invalid";
+    // Función para validar 
+    function validarEstado(cuadroNumero) {
+        var valor = cuadroNumero.value;
+        var valido = true;
+
+        if (valor.length < 1 || valor.length > 45) {
+            valido = false;
+        }
+
+        if (valido) {
+            cuadroNumero.className = "form-control is-valid";
+        } else {
+            cuadroNumero.className = "form-control is-invalid";
+        }
+
+        return valido;
     }
 
-    return valido;
 }
 
 
@@ -461,7 +465,7 @@ $(document).on("click", ".editar", function () {
             $('#exampleModal').modal('show');
         },
         error: function (error) {
-            alert("Error al obtener los datos del médico: " + error.statusText);
+            alert("Error al obtener los datos del cliente: " + error.statusText);
         }
     });
 });
@@ -499,7 +503,7 @@ $(document).on("click", ".eliminar", function () {
                 showConfirmButton: false,
                 timer: 1500
             });
-            listarMedico()
+            listarCliente()
         }
     })
 });

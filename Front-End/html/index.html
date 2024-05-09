@@ -15,7 +15,7 @@
         crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    
+    <script src="../js/cliente.js"></script>
 </head>
 
 <body>
@@ -141,7 +141,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                    <button type="submit" form="registroClienteForm" class="btn btn-success">Registrar</button>
+                    <button type="button" form="registroClienteForm" class="btn btn-success" onclick="registrarCliente()">Registrar</button>
                 </div>
             </div>
         </div>
@@ -151,7 +151,7 @@
     <script>
         // Función para limpiar el formulario de registro de cliente
         function limpiarFormulario() {
-            document.getElementById('registroClienteForm').reset();
+            document.getElementById('registrarCliente').reset();
         }
 
         // Función para filtrar clientes
