@@ -7,6 +7,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 
 @Entity(name = "venta")
@@ -35,7 +36,7 @@ public class venta {
      private Date fechaVenta;
 
      @ManyToOne
-     @Column(name = "idCliente", nullable = false,length = 10)
+     @JoinColumn(name = "idCliente", nullable = false)
      private cliente idCliente;
 
     public venta() {

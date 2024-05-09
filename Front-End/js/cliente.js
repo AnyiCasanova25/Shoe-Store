@@ -1,209 +1,514 @@
-var url = "http://localhost:8080/api/v1/cliente/";
-
-function listarCliente() {
-    var urlLocal = url;
-    var filtro = document.getElementById("texto").value
-    if (filtro != "")
-        urlLocal += "busqueda/" + filtro;
-
+function buscarClientePorFiltro(filtro) {
     $.ajax({
-        url: urlLocal,
+        url: "http://localhost:8080/api/v1/cliente/busquedafiltro/" + filtro,
         type: "GET",
         success: function (result) {
-            var cuerpoTablaCliente = document.getElementById("cuerpoTablaCliente");
-            cuerpoTablaCliente.innerHTML = "";
+            var cuerpoTabla = document.getElementById("cuerpoTabla");
+            cuerpoTabla.innerHTML = "";
+
             for (var i = 0; i < result.length; i++) {
-                var trResgistro = document.createElement("tr");
-
-                var celdaId = document.createElement("td");
-                var celdaTipoDocumento = document.createElement("td");
-                var celdanNumeroDocumento = document.createElement("td");
-                var celdaNombreCliente = document.createElement("td");
-                var celdaApellidoCliente = document.createElement("td");
-                var celdaTelefono = document.createElement("td");
-                var celdaDireccion = document.createElement("td");
-                var celdaCiudad = document.createElement("td");
-                var celdaEstado = document.createElement("td");
-
-                celdaId.innerText = result[i]["idCliente"];
-                celdaTipoDocumento.innerText = result[i]["tipoDocumento"];
-                celdanNumeroDocumento.innerText = result[i]["numeroDocumento"];
-                celdaNombreCliente.innerText = result[i]["nombreCliente"];
-                celdaApellidoCliente.innerText = result[i]["apellidoCliente"];
-                celdaTelefono.innerText = result[i]["telefono"];
-                celdaDireccion.innerText = result[i]["direccion"];
-                celdaCiudad.innerText = result[i]["ciudad"];
-                celdaEstado.innerText = result[i]["estado"];
-
-                trResgistro.appendChild(celdaId);
-                trResgistro.appendChild(celdaTipoDocumento);
-                trResgistro.appendChild(celdanNumeroDocumento);
-                trResgistro.appendChild(celdaNombreCliente);
-                trResgistro.appendChild(celdaApellidoCliente);
-                trResgistro.appendChild(celdaTelefono);
-                trResgistro.appendChild(celdaDireccion);
-                trResgistro.appendChild(celdaCiudad);
-                trResgistro.appendChild(celdaEstado);
-
-                var celdaOpcion = document.createElement("td");
-                var botonEditarCliente = document.createElement("button");
-                botonEditarCliente.value = result[i]["idCliente"];
-                botonEditarCliente.innerHTML = "Editar";
-
-                botonEditarCliente.onclick = function (e) {
-                    $('#exampleModal').modal('show');
-                    consultarClienteID(this.value);
-                }
-                botonEditarCliente.className = "btn btn-warning editar-cliente";
-
-                var botonDeshabilitarCliente = document.createElement("button");
-                botonDeshabilitarCliente.innerHTML = "Deshabilitar";
-                botonDeshabilitarCliente.className = "btn btn-danger deshabilitar-cliente";
-
-                var clienteIdParaDeshabilitar = result[i]["idCliente"];
-                botonDeshabilitarCliente.onclick = function () {
-                    deshabilitarCliente(clienteIdParaDeshabilitar);
-                };
-
-                celdaOpcion.appendChild(botonEditarCliente);
-                celdaOpcion.appendChild(botonDeshabilitarCliente);
-
-                trResgistro.appendChild(celdaOpcion)
-                cuerpoTablaCliente.appendChild(trResgistro);
+                var trRegistro = document.createElement("tr");
+                trRegistro.innerHTML = `
+                    <td>${result[i]["idCliente"]}</td>
+                    <td class="text-center align-middle">${result[i]["tipoDocumento"]}</td>
+                    <td class="text-center align-middle">${result[i]["numeroDocumento"]}</td>
+                    <td class="text-center align-middle">${result[i]["nombreCliente"]}</td>
+                    <td class="text-center align-middle">${result[i]["apellidoCliente"]}</td>
+                    <td class="text-center align-middle">${result[i]["telefono"]}</td>
+                    <td class="text-center align-middle">${result[i]["direccion"]}</td>
+                    <td class="text-center align-middle">${result[i]["ciudad"]}</td>
+                    <td class="text-center align-middle">${result[i]["estado"]}</td>
+                    <td class="text-center align-middle">
+                        <i class="fas fa-edit editar"  onclick="registrarClienteBandera=false;" data-id="${result[i]["idCliente"]}"></i>
+                        <i class="fas fa-user-slash cambiarEstado" onclick="cambiarEstado(${result[i]["idCliente"]})" data-id="${result[i]["idCliente"]}"></i>
+                        <i class="fas fa-trash-alt eliminar" data-id="${result[i]["idCliente"]}"></i>
+                    </td>
+                `;
+                cuerpoTabla.appendChild(trRegistro);
             }
         },
         error: function (error) {
-            alert("Error en la petición " + error);
-        }
-    })
-}
-
-function consultarClienteID(id) {
-    $.ajax({
-        url: url + id,
-        type: "GET",
-        success: function (result) {
-            document.getElementById("tipo_id").value = result["tipoDocumento"];
-            document.getElementById("doc_cliente").value = result["numeroDocumento"];
-            document.getElementById("nombre_cliente").value = result["nombreCliente"];
-            document.getElementById("apellido_cliente").value = result["apellidoCliente"];
-            document.getElementById("telefono_cliente").value = result["telefono"];
-            document.getElementById("direccion_cliente").value = result["direccion"];
-            document.getElementById("ciudad_cliente").value = result["ciudad"];
-            document.getElementById("estado_cliente").value = result["estado"];
+            alert("Error en la petición: " + error);
         }
     });
 }
 
-function actualizarCliente() {
-    var id_cliente = document.getElementById("id_cliente").value
-    var formData = {
-        "tipoDocumento": document.getElementById("tipo_id").value,
-        "numeroDocumento": document.getElementById("doc_cliente").value,
-        "nombreCliente": document.getElementById("nombre_cliente").value,
-        "apellidoCliente": document.getElementById("apellido_cliente").value,
-        "telefono": document.getElementById("telefono_cliente").value,
-        "direccion": document.getElementById("direccion_cliente").value,
-        "ciudad": document.getElementById("ciudad_cliente").value,
-        "estado": document.getElementById("estado_cliente").value
-    };
-
-    if (validarCampos()) {
+function buscarClientePorEstado(estado) {
+    if (estado === '') {
+        listarMedico(); // Mostrar todos los médicos si estado es vacío
+    } else if (estado === 'H') {
+        // Mostrar solo los médicos habilitados si estado es 'H'
         $.ajax({
-            url: url + id_cliente,
-            type: "PUT",
-            data: formData,
+            url: "http://localhost:8080/api/v1/cliente/busquedafiltroestado/" + estado,
+            type: "GET",
             success: function (result) {
-                Swal.fire({
-                    title: "¡Excelente!",
-                    text: "Se guardó correctamente",
-                    icon: "success"
-                });
-                listarCliente();
+                var cuerpoTabla = document.getElementById("cuerpoTabla");
+                cuerpoTabla.innerHTML = "";
+
+                for (var i = 0; i < result.length; i++) {
+                    var trRegistro = document.createElement("tr");
+                    trRegistro.innerHTML = `
+                        <td>${result[i]["idCliente"]}</td>
+                        <td class="text-center align-middle">${result[i]["tipoDocumento"]}</td>
+                        <td class="text-center align-middle">${result[i]["numeroDocumento"]}</td>
+                        <td class="text-center align-middle">${result[i]["nombreCliente"]}</td>
+                        <td class="text-center align-middle">${result[i]["apellidoCliente"]}</td>
+                        <td class="text-center align-middle">${result[i]["telefono"]}</td>
+                        <td class="text-center align-middle">${result[i]["direccion"]}</td>
+                        <td class="text-center align-middle">${result[i]["ciudad"]}</td>
+                        <td class="text-center align-middle">${result[i]["estado"]}</td>
+                        <td class="text-center align-middle">
+                            <i class="fas fa-edit editar"  onclick="registrarMClienteBandera=false;" data-id="${result[i]["idCliente"]}"></i>
+                            <i class="fas fa-user-slash cambiarEstado" onclick="cambiarEstado(${result[i]["idCliente"]})" data-id="${result[i]["idCliente"]}"></i>
+                            <i class="fas fa-trash-alt eliminar" data-id="${result[i]["idCliente"]}"></i>
+                        </td>
+                    `;
+                    cuerpoTabla.appendChild(trRegistro);
+                }
             },
             error: function (error) {
-                Swal.fire({
-                    title: "¡Error!",
-                    text: "No se guardó",
-                    icon: "error"
+                alert("Error en la petición: " + error);
+            }
+        });
+    } else {
+        // Mostrar solo los médicos deshabilitados si no es vacío ni 'H'
+        $.ajax({
+            url: "http://localhost:8080/api/v1/cliente/busquedafiltroestado/" + estado,
+            type: "GET",
+            success: function (result) {
+                var cuerpoTabla = document.getElementById("cuerpoTabla");
+                cuerpoTabla.innerHTML = "";
+
+                for (var i = 0; i < result.length; i++) {
+                    var trRegistro = document.createElement("tr");
+                    trRegistro.innerHTML = `
+                        <td>${result[i]["idCliente"]}</td>
+                        <td class="text-center align-middle">${result[i]["tipoDocumento"]}</td>
+                        <td class="text-center align-middle">${result[i]["numeroDocumento"]}</td>
+                        <td class="text-center align-middle">${result[i]["nombreCliente"]}</td>
+                        <td class="text-center align-middle">${result[i]["apellidoCliente"]}</td>
+                        <td class="text-center align-middle">${result[i]["telefono"]}</td>
+                        <td class="text-center align-middle">${result[i]["direccion"]}</td>
+                        <td class="text-center align-middle">${result[i]["ciudad"]}</td>
+                        <td class="text-center align-middle">${result[i]["estado"]}</td>
+                        <td class="text-center align-middle">
+                            <i class="fas fa-edit editar"  onclick="registrarClienteBandera=false;" data-id="${result[i]["idCliente"]}"></i>
+                            <i class="fas fa-user-slash cambiarEstado" onclick="cambiarEstado(${result[i]["idCliente"]})" data-id="${result[i]["idMedico"]}"></i>
+                            <i class="fas fa-trash-alt eliminar" data-id="${result[i]["idCliente"]}"></i>
+                        </td>
+                    `;
+                    cuerpoTabla.appendChild(trRegistro);
+                }
+            },
+            error: function (error) {
+                alert("Error en la petición: " + error);
+            }
+        });
+    }
+}
+
+
+
+
+
+
+// URL de la API
+var url = "http://localhost:8080/api/v1/cliente/";
+
+// Función para listar los médicos
+function listarCliente() {
+    $.ajax({
+        url: url,
+        type: "GET",
+        success: function (result) {
+            var cuerpoTabla = document.getElementById("cuerpoTabla");
+            cuerpoTabla.innerHTML = "";
+
+            for (var i = 0; i < result.length; i++) {
+                var trRegistro = document.createElement("tr");
+                trRegistro.innerHTML = `
+                    <td>${result[i]["idCliente"]}</td>
+                    <td class="text-center align-middle">${result[i]["tipoDocumento"]}</td>
+                    <td class="text-center align-middle">${result[i]["numeroDocumento"]}</td>
+                    <td class="text-center align-middle">${result[i]["nombreCliente"]}</td>
+                    <td class="text-center align-middle">${result[i]["apellidoCliente"]}</td>
+                    <td class="text-center align-middle">${result[i]["telefono"]}</td>
+                    <td class="text-center align-middle">${result[i]["direccion"]}</td>
+                    <td class="text-center align-middle">${result[i]["ciudad"]}</td>
+                    <td class="text-center align-middle">${result[i]["estado"]}</td>
+                    <td class="text-center align-middle">
+                        <i class="fas fa-edit editar"  onclick="registrarClienteBandera=false;" data-id="${result[i]["idCliente"]}"></i>
+                        <i class="fas fa-user-slash cambiarEstado" onclick="cambiarEstado(${result[i]["idCliente"]})" data-id="${result[i]["idCliente"]}"></i>
+                        <i class="fas fa-trash-alt eliminar" data-id="${result[i]["idCliente"]}"></i>
+                    </td>
+                `;
+                cuerpoTabla.appendChild(trRegistro);
+            }
+        },
+        error: function (error) {
+            alert("Error en la petición: " + error);
+        }
+    });
+}
+
+var registrarClienteBandera = true;
+
+// Función para registrar un médico
+function registrarCliente() {
+    var forData = {
+        "tipoDocumento": document.getElementById("tipoDocumento").value,
+        "numeroDocumento": document.getElementById("numeroDocumento").value,
+        "nombreCliente": document.getElementById("nombreCliente").value,
+        "apellidoCliente": document.getElementById("apellidoCliente").value,
+        "telefono": document.getElementById("telefono").value,
+        "direccion": document.getElementById("direccion").value,
+        "ciudad": document.getElementById("ciudad").value,
+        "estado": document.getElementById("estado").value,
+    };
+    var metodo = "";
+    var urlLocal = "";
+    var textoimprimir = "";
+    if (registrarClienteBandera == true) {
+        metodo = "POST";
+        urlLocal = url;
+
+    } else {
+        metodo = "PUT";
+        urlLocal = url + idCliente;
+    }
+    if (validarCampos()) {
+        $.ajax({
+            url: urlLocal,
+            type: metodo,
+            data: forData,
+            success: function (result) {
+                textoimprimir;
+                $('#exampleModal').modal('hide');
+                listarCliente();
+
+                textoimprimir = Swal.fire({
+                    title: "LISTO",
+                    text: "Felicidades, Guardado con éxito",
+                    icon: "success"
+                });
+            },
+            error: function (error) {
+                textoimprimir = Swal.fire({
+                    title: "ERROR",
+                    text: responseText,
+                    icon: "success"
                 });
             }
         });
     } else {
         Swal.fire({
-            title: "¡Error!",
-            text: "Llene todos los campos correctamente",
+            title: "Error!",
+            text: "¡Llene todos los campos correctamente!",
             icon: "error"
         });
     }
 }
 
-function deshabilitarCliente(id) {
-    Swal.fire({
-        title: '¿Está seguro?',
-        text: "Esta acción no se puede deshacer",
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Sí, deshabilitar!'
-    }).then((result) => {
-        if (result.isConfirmed) {
-            $.ajax({
-                url: url + id,
-                type: "DELETE",
-                success: function (result) {
-                    Swal.fire(
-                        'Deshabilitado!',
-                        'El registro ha sido deshabilitado.',
-                        'success'
-                    );
-                    listarCliente();
-                },
-                error: function (error) {
-                    Swal.fire(
-                        'Error!',
-                        'No se pudo deshabilitar el registro.',
-                        'error'
-                    );
-                }
-            });
+// Función para validar campos
+// Función  Documento Identidad
+function validarCampoNumeroDocumento() {
+    var  numeroDocumento = document.getElementById("numeroDocumento");
+    return validarNumeroDocumento(numeroDocumento);
+}
+
+// Función para validar el documento de identidad
+function validarNumeroDocumento(cuadroNumero) {
+    var valor = cuadroNumero.value;
+    var valido = true;
+
+    if (valor.length < 5 || valor.length > 11) {
+        valido = false;
+    }
+
+    if (valido) {
+        cuadroNumero.className = "form-control is-valid";
+    } else {
+        cuadroNumero.className = "form-control is-invalid";
+    }
+
+    return valido;
+}
+
+
+// Función tipo documento
+
+function validarValidarCampoTipoDocumento() {
+    var tipoDocumento  = document.getElementById("tipoDocumento");
+    return (tipoDocumento);
+}
+
+// Función para validar 
+
+function validarTipoDocumento(cuadroNumero) {
+    var valor = cuadroNumero.value;
+    var valido = true;
+
+    if (valor.length < 1 || valor.length > 11) {
+        valido = false;
+    }
+
+    if (valido) {
+        cuadroNumero.className = "form-control is-valid";
+    } else {
+        cuadroNumero.className = "form-control is-invalid";
+    }
+
+    return valido;
+}
+
+
+// Función nombre cliente
+
+function validarCampoNombreCliente() {
+    var nombreCliente = document.getElementById("nombreCliente");
+    return validarNombreCliente(nombreCliente);
+}
+
+// Función para validar 
+function validarNombreCliente(cuadroNumero) {
+    var valor = cuadroNumero.value;
+    var valido = true;
+
+    if (valor.length < 1 || valor.length > 11) {
+        valido = false;
+    }
+
+    if (valido) {
+        cuadroNumero.className = "form-control is-valid";
+    } else {
+        cuadroNumero.className = "form-control is-invalid";
+    }
+
+    return valido;
+}
+
+
+// Función apellido cliente
+
+function validarCampoApellidoCliente() {
+    var apellidoCliente = document.getElementById("apellidoCliente");
+    return validarApellidoCliente(apellidoCliente);
+}
+
+// Función para validar 
+function validarApellidoCliente(cuadroNumero) {
+    var valor = cuadroNumero.value;
+    var valido = true;
+
+    if (valor.length < 1 || valor.length > 15) {
+        valido = false;
+    }
+
+    if (valido) {
+        cuadroNumero.className = "form-control is-valid";
+    } else {
+        cuadroNumero.className = "form-control is-invalid";
+    }
+
+    return valido;
+}
+
+
+// Función telefono
+
+function validarCampoTelefono() {
+    var telefono = document.getElementById("telefono");
+    return validarTelefono(telefono);
+}
+
+// Función para validar 
+function validarTelefono(cuadroNumero) {
+    var valor = cuadroNumero.value;
+    var valido = true;
+
+    if (valor.length < 1 || valor.length > 155) {
+        valido = false;
+    }
+
+    if (valido) {
+        cuadroNumero.className = "form-control is-valid";
+    } else {
+        cuadroNumero.className = "form-control is-invalid";
+    }
+
+    return valido;
+}
+
+
+// Función Direccion
+
+function validarCampoDireccion() {
+    var direccion = document.getElementById("direccion");
+    return validarDireccion(direccion);
+}
+
+// Función para validar 
+function validarDireccion(cuadroNumero) {
+    var valor = cuadroNumero.value;
+    var valido = true;
+
+    if (valor.length < 1 || valor.length > 15) {
+        valido = false;
+    }
+
+    if (valido) {
+        cuadroNumero.className = "form-control is-valid";
+    } else {
+        cuadroNumero.className = "form-control is-invalid";
+    }
+
+    return valido;
+}
+
+
+// Función ciudad
+
+function validarCampoCiudad() {
+    var ciudad = document.getElementById("ciudad");
+    return validarCiudad(ciudad);
+}
+
+// Función para validar 
+function validarCiudad(cuadroNumero) {
+    var valor = cuadroNumero.value;
+    var valido = true;
+
+    if (valor.length < 1 || valor.length > 15) {
+        valido = false;
+    }
+
+    if (valido) {
+        cuadroNumero.className = "form-control is-valid";
+    } else {
+        cuadroNumero.className = "form-control is-invalid";
+    }
+
+    return valido;
+}
+
+
+// Función Estado
+
+function validarCampoEstado() {
+    var estado = document.getElementById("estado");
+    return validarEstado(estado);
+}
+
+// Función para validar 
+function validarEstado(cuadroNumero) {
+    var valor = cuadroNumero.value;
+    var valido = true;
+
+    if (valor.length < 1 || valor.length > 15) {
+        valido = false;
+    }
+
+    if (valido) {
+        cuadroNumero.className = "form-control is-valid";
+    } else {
+        cuadroNumero.className = "form-control is-invalid";
+    }
+
+    return valido;
+}
+
+
+
+
+// Función para limpiar campos del formulario
+function limpiar() {
+    document.getElementById("tipoDocumento").value = "";
+    document.getElementById("tipoDocumento").className = "form-control";
+    document.getElementById("numeroDocumento").value = "";
+    document.getElementById("numeroDocumento").className = "form-control";
+    document.getElementById("nombreCliente").value = "";
+    document.getElementById("nombreCliente").className = "form-control";
+    document.getElementById("apellidoCliente").value = "";
+    document.getElementById("apellidoCliente").className = "form-control";
+    document.getElementById("telefono").value = "";
+    document.getElementById("telefono").className = "form-control";
+    document.getElementById("direccion").value = "";
+    document.getElementById("direccion").className = "form-control";
+    document.getElementById("ciudad").value = "";
+    document.getElementById("ciudad").className = "form-control";
+    document.getElementById("estado").value = "";
+    document.getElementById("estado").className = "form-control";
+}
+
+var idCliente = "";
+// Asociar eventos de clic a los iconos dentro de la tabla
+$(document).on("click", ".editar", function () {
+    limpiar();
+    idCliente = $(this).data("id");
+
+    $.ajax({
+        url: url + idCliente,
+        type: "GET",
+        success: function (cliente) {
+            document.getElementById("tipoDocumento").value = cliente.tipoDocumento;
+            document.getElementById("numeroDocumento").value = cliente.numeroDocumento;
+            document.getElementById("nombreCliente").value = cliente.nombreCliente;
+            document.getElementById("apellidoCliente").value = cliente.apellidoCliente;
+            document.getElementById("telefono").value = cliente.telefono;
+            document.getElementById("direccion").value = cliente.direccion;
+            document.getElementById("ciudad").value = cliente.ciudad;
+            document.getElementById("estado").value = cliente.estado;
+            $('#exampleModal').modal('show');
+        },
+        error: function (error) {
+            alert("Error al obtener los datos del médico: " + error.statusText);
         }
     });
+});
+
+$(document).on("click", ".cambiarEstado", function () {
+    var idCliente = $(this).data("id");
+    $.ajax({
+        url: url + idCliente,
+        type: "DELETE",
+        success: function () {
+            Swal.fire({
+                position: "top-end",
+                icon: "success",
+                title: "Cambio de estado exitoso",
+                showConfirmButton: false,
+                timer: 1500
+            });
+            listarCliente(); // Actualiza la lista de pacientes en el front-end
+        }
+    });
+});
+
+
+
+$(document).on("click", ".eliminar", function () {
+    var idCliente = $(this).data("id");
+    $.ajax({
+        url: url + "eliminarPermanente/" + idCliente,
+        type: "DELETE",
+        success: function (eliminarPermanente) {
+            Swal.fire({
+                position: "top-end",
+                icon: "success",
+                title: "Registro Eliminado",
+                showConfirmButton: false,
+                timer: 1500
+            });
+            listarMedico()
+        }
+    })
+});
+
+// Llamar a la función para listar médicos al cargar la página
+$(document).ready(function () {
+    listarCliente();
+});
+function actualizarListarCliente() {
+    listarCliente();
 }
-
-function registrarCliente() {
-    var formData = {
-        "tipoDocumento": document.getElementById("tipo_id").value,
-        "numeroDocumento": document.getElementById("doc_cliente").value,
-        "nombreCliente": document.getElementById("nombre_cliente").value,
-        "apellidoCliente": document.getElementById("apellido_cliente").value,
-        "telefono": document.getElementById("telefono_cliente").value,
-        "direccion": document.getElementById("direccion_cliente").value,
-        "ciudad": document.getElementById("ciudad_cliente").value,
-        "estado": document.getElementById("estado_cliente").value
-    };
-
-    if (validarCampos()) {
-        $.ajax({
-            url: url,
-            type: "POST",
-            data: formData,
-            success: function (result) {
-                Swal.fire({
-                    title: "¡Excelente!",
-                    text: "Se guardó correctamente",
-                    icon: "success"
-                });
-            },
-        })
-    } else {
-        Swal.fire({
-            title: "¡Error!",
-            text: "Llene todos los campos correctamente",
-            icon: "error"
-        });
-    }
-}
-
 
