@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="/Front-End/img/logo1-removebg-preview.png">
+    <title>Producto</title>
+    <link rel="stylesheet" href="/Front-end/css/index.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    
+</head>
+
+<body>
+    <div class="container">
+        <!-- Menú en el lado izquierdo -->
+        <div class="menu">
+            <a href="/Front-End/html/index.html">
+            <img src="/Front-End/img/logo1-removebg-preview.png" class="img-logo"></a>
+            <ul class="color-blanco">
+                <a href="/Front-end/html/cliente.html"> Clientes</a>
+                <a href="/Front-end/html/producto.html">Producto</a>
+                <a href="/Front-end/html/venta.html">Ventas</a>
+            </ul>
+        </div>
+
+        <!-- Contenido en el lado derecho -->
+        <div class="content">
+            <div class="table-container">
+                <div style="display: flex;">
+                    <h1>Producto</h1>
+                </div>
+                <div class="container-sm" style="background-color:rgba(255, 255, 255, 0.695); border-radius: 0;">
+                    <div class="container" style="padding: 0%; color:rgb(0, 0, 0);">
+                        <!-- Inputs para búsqueda y filtro -->
+                        <div class="row">
+                            <div class="col col-xl-6 col-12" style="padding-top: 2%;">
+                                <label for="buscarNombre">Buscar por Nombre:</label>
+                                <input type="text" id="buscarNombre" class="form-control">
+                            </div>
+                            <div class="col col-xl-6 col-12" style="padding-top: 2%;">
+                                <label for="filtroEstado">Filtrar por Estado:</label>
+                                <select class="form-select" id="filtroEstado">
+                                    <option value="1">Todos</option>
+                                    <option value="2">Activos</option>
+                                    <option value="3">Inactivos</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Botones -->
+                        <div class="botones">
+                            <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                                data-bs-target="#modalRegistroCliente">
+                                Agregar Producto
+                            </button>
+                            <button type="button" class="btn btn-danger ms-2"
+                                onclick="limpiarFormulario()">Limpiar</button>
+                            <button type="button" class="btn btn-primary ms-2"
+                                onclick="filtrarClientes()">Filtrar</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tabla -->
+                <br>
+                <table class="table table-striped">
+                    <tr>
+                        <th>Id Producto</th>
+                        <th>Nombre</th>
+                        <th>Descripcion</th>
+                        <th>Cantidad</th>
+                        <th>Precio</th>
+                        <th>IVA</th>
+                        <th>Descuento</th>
+                        <th>Estado</th>
+                        <th>Acciones</th>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+    <!-- Modal de registro de cliente -->
+    <div class="modal fade" id="modalRegistroCliente" tabindex="-1" aria-labelledby="modalAgregaProductoLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalRegistroClienteLabel">Agrgar Producto</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+
+                <div class="modal-body">
+                    <!-- Formulario de registro de cliente -->
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="inputNombre" class="form-label">Nombre:</label>
+                                <input type="text" class="form-control" id="inputNombre" placeholder="Digite el nombre">
+                            </div>
+                            <div class="mb-3">
+                                <label for="inputCantidad" class="form-label">Cantidad:</label>
+                                <input type="text" class="form-control" id="inputCantidad"
+                                    placeholder="Digite la cantidad">
+                            </div>
+                            <div class="mb-3">
+                                <label for="inputDescripcion" class="form-label">Descripcion:</label>
+                                <input type="text" class="form-control" id="inputDescripcion" placeholder="Descripcion">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="inputPrecio" class="form-label">Precio:</label>
+                                <input type="text" class="form-control" id="inputPrecio" placeholder="Precio">
+                            </div>
+                            <div class="mb-3">
+                                <label for="inputIVA" class="form-label">IVA:</label>
+                                <input type="text" class="form-control" id="inputIVA" placeholder="IVA">
+                            </div>
+                            <div class="mb-3">
+                                <label for="inputDescuento" class="form-label">Descuento:</label>
+                                <input type="text" class="form-control" id="inputDescuento" placeholder="Descuento">
+                            </div>
+                        </div>
+                            <div class="mb-3">
+                                <label for="inputEstado" class="form-label">Estado:</label>
+                                <select class="form-select" id="inputEstado">
+                                    <option value="activo">Activo</option>
+                                    <option value="inactivo">Inactivo</option>
+                                </select>
+                            </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" form="registroClienteForm" class="btn btn-success">Registrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+        // Función para limpiar el formulario de registro de cliente
+        function limpiarFormulario() {
+            document.getElementById('registroClienteForm').reset();
+        }
+
+        // Función para filtrar clientes
+        function filtrarClientes() {
+            // Aquí puedes agregar la lógica para filtrar los clientes si es necesario
+            alert('Implementa la lógica de filtrado aquí');
+        }
+    </script>
+</body>
+
+</html>
