@@ -301,19 +301,19 @@ $(document).on("click", ".editar", function () {
     $.ajax({
         url: url + idCliente,
         type: "GET",
-        success: function (cliente) {
-            document.getElementById("tipoDocumento").value = cliente.tipoDocumento;
-            document.getElementById("numeroDocumento").value = cliente.numeroDocumento;
-            document.getElementById("nombreCliente").value = cliente.nombreCliente;
-            document.getElementById("apellidoCliente").value = cliente.apellidoCliente;
-            document.getElementById("telefono").value = cliente.telefono;
-            document.getElementById("ciudad").value = cliente.ciudad;
-            document.getElementById("direccion").value = cliente.direccion;
-            document.getElementById("estado").value = cliente.estado;
+        success: function (medico) {
+            document.getElementById("tipoDocumento").value = medico.tipoDocumento;
+            document.getElementById("numeroDocumento").value = medico.numeroDocumento;
+            document.getElementById("nombreCliente").value = medico.nombreCliente;
+            document.getElementById("apellidoCliente").value = medico.apellidoCliente;
+            document.getElementById("telefono").value = medico.telefono;
+            document.getElementById("ciudad").value = medico.ciudad;
+            document.getElementById("direccion").value = medico.direccion;
+            document.getElementById("estado").value = medico.estado;
             $('#exampleModal').modal('show');
         },
         error: function (error) {
-            alert("Error al obtener los datos del cliente: " + error.statusText);
+            alert("Error al obtener los datos del médico: " + error.statusText);
         }
     });
 });
@@ -345,7 +345,7 @@ $(document).on("click", ".eliminar", function () {
     // Mostrar un cuadro de diálogo para confirmar la eliminación
     Swal.fire({
         title: '¿Estás seguro?',
-        text: "¿Deseas eliminar este cliente?",
+        text: "¿Deseas eliminar este medico?",
         icon: 'warning',
         showCancelButton: true,
         confirmButtonColor: '#3085d6',
@@ -374,7 +374,7 @@ $(document).on("click", ".eliminar", function () {
                     Swal.fire({
                         icon: 'error',
                         title: 'Error',
-                        text: 'El registro tiene una venta.'
+                        text: 'El registro tiene un ingreso.'
                     });
                 }
             });
